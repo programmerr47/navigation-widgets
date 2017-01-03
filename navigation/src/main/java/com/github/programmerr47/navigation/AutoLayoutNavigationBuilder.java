@@ -2,6 +2,7 @@ package com.github.programmerr47.navigation;
 
 import android.view.View;
 
+import com.github.programmerr47.navigation.NavigationDefaults.NavigationDefaultsHolder;
 import com.github.programmerr47.navigation.layoutfactory.DummyLayoutFactory;
 import com.github.programmerr47.navigation.layoutfactory.IdLayoutFactory;
 import com.github.programmerr47.navigation.layoutfactory.LayoutFactory;
@@ -10,7 +11,6 @@ import com.github.programmerr47.navigation.layoutfactory.NavigationLayoutFactory
 public final class AutoLayoutNavigationBuilder extends NavigationBuilder<AutoLayoutNavigationBuilder> {
     private boolean includeToolbar;
     private boolean includeBottomBar;
-    private int toolbarLayoutId; //todo
 
     public static AutoLayoutNavigationBuilder navigation(int id) {
         return new AutoLayoutNavigationBuilder(new IdLayoutFactory(id));
@@ -21,7 +21,7 @@ public final class AutoLayoutNavigationBuilder extends NavigationBuilder<AutoLay
     }
 
     public AutoLayoutNavigationBuilder(LayoutFactory layoutFactory) {
-        super(layoutFactory);
+        super(layoutFactory, NavigationDefaultsHolder.navigationDefaults());
     }
 
     @Override
@@ -31,7 +31,7 @@ public final class AutoLayoutNavigationBuilder extends NavigationBuilder<AutoLay
 
     @Override
     public LayoutFactory layoutFactory() {
-        return new NavigationLayoutFactory(includeToolbar, includeBottomBar, toolbarLayoutId, super.layoutFactory());
+        return new NavigationLayoutFactory(includeToolbar, includeBottomBar, super.layoutFactory());
     }
 
     public AutoLayoutNavigationBuilder includeToolbar() {

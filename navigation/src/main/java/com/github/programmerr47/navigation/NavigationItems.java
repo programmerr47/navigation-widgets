@@ -1,7 +1,5 @@
 package com.github.programmerr47.navigation;
 
-import android.support.annotation.IntDef;
-
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 
 import java.util.ArrayList;
@@ -27,6 +25,16 @@ public final class NavigationItems extends ArrayList<NavigationItems.NavigationI
         super(c);
     }
 
+    public boolean contains(int type) {
+        for (NavigationItem item : this) {
+            if (item.type == type) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public List<AHBottomNavigationItem> bottomNavigationItems() {
         List<AHBottomNavigationItem> result = new ArrayList<>();
         for (NavigationItem item : this) {
@@ -34,6 +42,10 @@ public final class NavigationItems extends ArrayList<NavigationItems.NavigationI
         }
 
         return result;
+    }
+
+    public void addAll(NavigationItem... navigationItems) {
+        addAll(NavigationItems.of(navigationItems));
     }
 
     public static final class NavigationItem {

@@ -16,13 +16,11 @@ import static com.github.programmerr47.navigation.AndroidUtils.dp;
 public final class NavigationLayoutFactory implements LayoutFactory {
     private final boolean includeToolbar;
     private final boolean includeBottomBar;
-    private final int toolbarLayoutId;
     private final LayoutFactory origin;
 
-    public NavigationLayoutFactory(boolean includeToolbar, boolean includeBottomBar, int toolbarLayoutId, LayoutFactory origin) {
+    public NavigationLayoutFactory(boolean includeToolbar, boolean includeBottomBar, LayoutFactory origin) {
         this.includeToolbar = includeToolbar;
         this.includeBottomBar = includeBottomBar;
-        this.toolbarLayoutId = toolbarLayoutId;
         this.origin = origin;
     }
 
@@ -39,7 +37,7 @@ public final class NavigationLayoutFactory implements LayoutFactory {
         }
 
         if (includeToolbar) {
-            inflater.inflate(toolbarLayoutId, parent);
+            inflater.inflate(R.layout.toolbar, parent);
         }
         parent.addView(child, childParams);
         if (includeBottomBar) {

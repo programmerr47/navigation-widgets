@@ -2,9 +2,7 @@ package com.github.programmerr47.navigation;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +13,7 @@ import android.view.animation.Animation;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation.OnTabSelectedListener;
+import com.github.programmerr47.navigation.NavigationIcons.NavigationIcon;
 import com.github.programmerr47.navigation.layoutfactory.DummyLayoutFactory;
 import com.github.programmerr47.navigation.layoutfactory.LayoutFactory;
 import com.github.programmerr47.navigation.menu.MenuActions;
@@ -23,24 +22,12 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.aurelhubert.ahbottomnavigation.AHBottomNavigation.TitleState.ALWAYS_SHOW;
 import static com.github.programmerr47.navigation.AndroidUtils.bind;
-import static com.github.programmerr47.navigation.AndroidUtils.color;
-import static com.github.programmerr47.navigation.NavigationIcons.BACK;
-import static com.github.programmerr47.navigation.NavigationIcons.CLOSE;
-import static com.github.programmerr47.navigation.NavigationIcons.NOTHING;
+import static com.github.programmerr47.navigation.NavigationBuilder.NO_NAV_ICON;
 
 public abstract class NavigationFragment extends Fragment implements OnTabSelectedListener {
     private static final LayoutFactory DUMMY_FACTORY = new DummyLayoutFactory(null);
 
-    private final NavigationItems navItems = NavigationItems.of(
-            navigationItem(SEARCH_PAGE, R.string.bottom_bar_tab_search, R.drawable.ic_tab_search, R.color.colorPrimary),
-            navigationItem(FAVORITES_PAGE, R.string.bottom_bar_tab_favorites, R.drawable.ic_tab_favorites, R.color.colorPrimary),
-            navigationItem(ADVERT_CREATION_PAGE, R.string.bottom_bar_tab_create_advert, R.drawable.ic_tab_create_advert, R.color.colorPrimary, R.color.accent),
-            navigationItem(MESSAGES_PAGE, R.string.bottom_bar_tab_messages, R.drawable.ic_tab_messages, R.color.colorPrimary),
-            navigationItem(PROFILE_PAGE, R.string.bottom_bar_tab_profile, R.drawable.ic_tab_profile, R.color.colorPrimary));
-
     private NavigationBuilder<?> navigationBuilder;
-
-    private final View.OnClickListener backListener = view -> navigation.back();
 
     protected Toolbar toolbar;
     protected AHBottomNavigation bottomNavigation;
@@ -90,17 +77,13 @@ public abstract class NavigationFragment extends Fragment implements OnTabSelect
         } else {
             toolbar.setLogo(navigationBuilder.toolbarLogo);
         }
-        if (navigationBuilder.toolbarNavigationIcon == NOTHING) {
+        if (navigationBuilder.toolbarNavigationIcon == NO_NAV_ICON) {
             toolbar.setNavigationIcon(null);
             toolbar.setNavigationOnClickListener(null);
         } else {
-            VectorDrawableCompat navIcon = VectorDrawableCompat.create(
-                    getResources(),
-                    navigationIconFromType(navigationBuilder.toolbarNavigationIcon),
-                    getContext().getTheme());
-            DrawableCompat.setTint(navIcon, color(toolbar.getContext(), android.R.color.white));
-            toolbar.setNavigationIcon(navIcon);
-            toolbar.setNavigationOnClickListener(backListener);
+            NavigationIcon navIcon = navigationBuilder.navigationDefaults().navigationIcons().fromType(navigationBuilder.toolbarNavigationIcon);
+            toolbar.setNavigationIcon(navIcon.iconDrawable(toolbar.getContext()));
+            toolbar.setNavigationOnClickListener(navigationBuilder.navigationDefaults().navigationIconListener());
         }
 
 
@@ -122,19 +105,8 @@ public abstract class NavigationFragment extends Fragment implements OnTabSelect
         }
     }
 
-    private int navigationIconFromType(int navIconType) {
-        switch (navIconType) {
-            case BACK:
-                return R.drawable.ic_arrow_left;
-            case CLOSE:
-                return R.drawable.ic_close;
-            default:
-                throw new IllegalArgumentException("There is no icon for navigation icon type: " + navIconType);
-        }
-    }
-
     protected void prepareBottomNavigation(AHBottomNavigation bottomNavigation) {
-        bottomNavigation.addItems(navItems.bottomNavigationItems());
+        bottomNavigation.addItems(navigationBuilder.navigationDefaults().navigationItems().bottomNavigationItems());
         bottomNavigation.setCurrentItem(navigationBuilder.currentBottomBarItem, false);
         bottomNavigation.setOnTabSelectedListener(this);
         bottomNavigation.setTitleState(ALWAYS_SHOW);
@@ -150,7 +122,7 @@ public abstract class NavigationFragment extends Fragment implements OnTabSelect
 
     @Override
     public final boolean onTabSelected(int position, boolean wasSelected) {
-        int itemType = navItems.get(position).type();
+        int itemType = navigationBuilder.navigationDefaults().navigationItems().get(position).type();
         return onTabTypeSelected(itemType, wasSelected);
     }
 
