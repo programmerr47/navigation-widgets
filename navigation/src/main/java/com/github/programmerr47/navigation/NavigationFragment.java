@@ -106,8 +106,10 @@ public abstract class NavigationFragment extends Fragment implements OnTabSelect
     }
 
     protected void prepareBottomNavigation(AHBottomNavigation bottomNavigation) {
-        bottomNavigation.addItems(navigationBuilder.navigationDefaults().navigationItems().bottomNavigationItems());
-        bottomNavigation.setCurrentItem(navigationBuilder.currentBottomBarItem, false);
+        NavigationItems navigationItems = navigationBuilder.navigationDefaults().navigationItems();
+        bottomNavigation.removeAllItems();
+        bottomNavigation.addItems(navigationItems.bottomNavigationItems());
+        bottomNavigation.setCurrentItem(navigationItems.indexFromType(navigationBuilder.currentBottomBarItem), false);
         bottomNavigation.setOnTabSelectedListener(this);
         bottomNavigation.setTitleState(ALWAYS_SHOW);
         bottomNavigation.setColored(true);

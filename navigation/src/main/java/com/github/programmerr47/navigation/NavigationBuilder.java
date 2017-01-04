@@ -33,6 +33,7 @@ public abstract class NavigationBuilder<T extends NavigationBuilder<T>> {
         this.layoutFactory = layoutFactory;
         this.navigationDefaults = navigationDefaults;
         this.toolbarNavigationIcon = navigationDefaults.defaultNavigationIconType();
+        this.currentBottomBarItem = navigationDefaults.defaultBottomNavigationItem();
     }
 
     protected abstract T getThis();

@@ -44,6 +44,16 @@ public final class NavigationItems extends ArrayList<NavigationItems.NavigationI
         return result;
     }
 
+    public int indexFromType(int type) {
+        for (int i = 0; i < size(); i++) {
+            if (get(i).type == type) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     public void addAll(NavigationItem... navigationItems) {
         addAll(NavigationItems.of(navigationItems));
     }

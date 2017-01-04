@@ -20,6 +20,7 @@ public final class NavigationDefaults {
     private NavigationIcons navigationIcons = new NavigationIcons();
     private View.OnClickListener navigationIconListener = DUMMY_NAV_ICON_LISTENER;
     private int defaultNavigationIconType;
+    private int defaultBottomNavigationItem;
 
     public NavigationDefaults navigationItems(NavigationItem... navigationItems) {
         this.navigationItems.addAll(navigationItems);
@@ -63,6 +64,11 @@ public final class NavigationDefaults {
         return this;
     }
 
+    public NavigationDefaults defaultBottomNavigationItem(int defaultBottomNavigationItem) {
+        this.defaultBottomNavigationItem = defaultBottomNavigationItem;
+        return this;
+    }
+
     public NavigationItems navigationItems() {
         return navigationItems;
     }
@@ -77,6 +83,10 @@ public final class NavigationDefaults {
 
     public int defaultNavigationIconType() {
         return defaultNavigationIconType;
+    }
+
+    public int defaultBottomNavigationItem() {
+        return defaultBottomNavigationItem;
     }
 
     public static final class NavigationDefaultsHolder {
